@@ -1,6 +1,6 @@
 class Zombie < ActiveRecord::Base
 
-  attr_accessor :tweets, :custom_weapons
+  attr_accessor :tweets, :custom_weapons, :graveyard
 
   validates :name, presence: true
 
@@ -23,6 +23,16 @@ class Zombie < ActiveRecord::Base
 
   def swing(weapon)
     weapons.include?(weapon)
+  end
+
+  def geolocate
+    loc = Zoogle.graveyard_locator(self.graveyard)
+    "#{loc.latitude}, #{loc.longitude}"
+  end
+
+  class Zoogle
+    def self.graveyard_locator
+    end
   end
 end
 

@@ -75,7 +75,30 @@ describe Zombie do
 
     its(:name) { should be_nil }
     it('creates a zombie') { Zombie.count.should == 1 }
+  end
 
+  describe 'a violent Zombie' do
+    let(:zombie) { Zombie.create(name: 'Joe') }
+
+    it 'stubs' do
+      zombie.stub(:custom_weapons){ ['Banana'] }
+      zombie.weapons.should include('Banana')
+    end
+
+    it 'mocks' do
+      zombie.should_receive(:custom_weapons)
+      zombie.weapons
+    end
+  end
+
+  describe 'a location aware zombie' do
+    let(:zombie) { Zombie.create }
+
+    it 'returns formatted lat and long' do
+      location = double(latitude: 2, longitude: 3)
+      Zombie::Zoogle.stub(:graveyard_locator) { location }
+      zombie.geolocate.should == '2, 3'
+    end
   end
 end
 
