@@ -30,5 +30,52 @@ describe Zombie do
   it 'raises error calling #save! oninvalid zombie' do
     expect { Zombie.new.save! }.to raise_error(ActiveRecord::RecordInvalid)
   end
+
+  it 'responds to name' do
+    subject.should respond_to(:name)
+  end
+
+  it 'responds to name too' do
+    should respond_to(:name)
+  end
+
+  it('responds to name as well') { should respond_to(:name) }
+
+  it { should respond_to(:name) }
+
+  its(:weapons) { should == Zombie::WEAPONS }
+  its(:brains) { should be_zero }
+
+  context 'when hungry' do
+    it 'craves brains' do
+      zombie = Zombie.new
+      zombie.craving.should == 'brains'
+    end
+
+    context 'with a veggie preference' do
+      subject { Zombie.new(vegetarian: true) }
+
+      its(:craving) { should == 'vegan brains' }
+    end
+
+    context 'with custom weapons' do
+      subject(:zombie) { Zombie.new(custom_weapons: sword) }
+
+      let(:sword) { 'sword' }
+      its(:weapons) { should include(sword) }
+
+      it 'can use its sword' do
+        zombie.swing(sword).should == true
+      end
+    end
+  end
+
+  describe 'creating a Zombie' do
+    let!(:zombie) { Zombie.create(name: 'Joe') }
+
+    its(:name) { should be_nil }
+    it('creates a zombie') { Zombie.count.should == 1 }
+
+  end
 end
 
