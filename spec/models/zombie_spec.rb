@@ -100,5 +100,17 @@ describe Zombie do
       zombie.geolocate.should == '2, 3'
     end
   end
+
+  describe 'using the new expect() syntax' do
+    it 'requires name' do
+      zombie = Zombie.new
+      expect(zombie).not_to be_valid
+    end
+
+    it 'is named Ash' do
+      zombie = Zombie.new(name: 'Ash')
+      expect(zombie.name).to eq('Ash')
+    end
+  end
 end
 
